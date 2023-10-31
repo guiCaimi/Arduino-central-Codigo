@@ -25,14 +25,15 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
+    int tempo = 1000; // Tempo em milissegundos (ajuste conforme necessário)
+  for (int sensor = 2; sensor <= 16; sensor++) {
+    while (Serial.available() == 0) {}  // Aguarde a chegada de dados na serial
+
     char command = Serial.read();
     if (command == 'M') {
-      // Inicie a sequência de medidas para os sensores
-      for (int sensor = 2; sensor <= 16; sensor++) {
-        int tempo = 1000; // Tempo em milissegundos (ajuste conforme necessário)
-        FazerMedida(tempo, sensor);
-      }
+    
+      FazerMedida(tempo, sensor);
+      Serial.print("F");  // Sinalize o fim da medição
     }
   }
 }
@@ -42,7 +43,6 @@ void FazerMedida(int tempo, int sensor) {
   digitalWrite(sensor, HIGH);
   delay(tempo);
   DesativarSensores();
-  Serial.print("F");
 }
 
 void DesativarSensores() {
